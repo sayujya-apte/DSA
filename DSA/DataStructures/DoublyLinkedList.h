@@ -1,24 +1,25 @@
-#ifndef LINKED_LIST_H
+#ifndef DOUBLY_LINKED_LIST_H
 
 #include <initializer_list>
 #include <sstream>
 #include <stdexcept>
 #include <string>
 
-template <typename T> struct Node
+template <typename T> struct dNode
 {
-    T     data;
-    Node* next;
+    T      data;
+    dNode* prev;
+    dNode* next;
 };
 
-template <typename T> class LinkedList
+template <typename T> class DoublyLinkedList
 {
   public:
-    LinkedList() : head(nullptr), m_size(0)
+    DoublyLinkedList() : head(nullptr), m_size(0)
     {
     }
 
-    LinkedList(std::initializer_list<T> init_list) : head(nullptr), m_size(0)
+    DoublyLinkedList(std::initializer_list<T> init_list) : head(nullptr), m_size(0)
     {
         for (const T& elem : init_list)
         {
@@ -26,16 +27,17 @@ template <typename T> class LinkedList
         }
     }
 
-    ~LinkedList()
+    ~DoublyLinkedList()
     {
         delete head;
     }
 
     void Append(T data)
     {
-        Node<T>* temp1 = new Node<T>();
-        temp1->data    = data;
-        temp1->next    = nullptr;
+        dNode<T>* temp1 = new dNode<T>();
+        temp1->data     = data;
+        temp1->prev     = nullptr;
+        temp1->next     = nullptr;
 
         if (m_size == 0)
         {
@@ -44,13 +46,13 @@ template <typename T> class LinkedList
         }
         else
         {
-            Node<T>* temp2 = head;
+            dNode<T>* temp2 = head;
             for (int i = 0; i < m_size - 1; i++)
             {
                 temp2 = temp2->next;
             }
-            temp1->next = temp2->next;
             temp2->next = temp1;
+            temp1->prev = temp2;
         }
 
         m_size++;
@@ -58,9 +60,10 @@ template <typename T> class LinkedList
 
     void Insert(T data, int index)
     {
-        Node<T>* temp1 = new Node<T>();
-        temp1->data    = data;
-        temp1->next    = nullptr;
+        dNode<T>* temp1 = new dNode<T>();
+        temp1->data     = data;
+        temp1->next     = nullptr;
+        temp1->prev     = nullptr;
 
         if (index > m_size)
         {
@@ -74,13 +77,14 @@ template <typename T> class LinkedList
         }
         else
         {
-            Node<T>* temp2 = head;
+            dNode<T>* temp2 = head;
             for (int i = 0; i < index - 1; i++)
             {
                 temp2 = temp2->next;
             }
             temp1->next = temp2->next;
             temp2->next = temp1;
+            temp1->prev = temp2;
         }
 
         m_size++;
@@ -88,7 +92,7 @@ template <typename T> class LinkedList
 
     void Delete(int index)
     {
-        Node<T>* temp1 = head;
+        dNode<T>* temp1 = head;
 
         if (index >= m_size)
         {
@@ -97,7 +101,8 @@ template <typename T> class LinkedList
 
         if (index == 0)
         {
-            head = temp1->next;
+            head              = temp1->next;
+            temp1->next->prev = nullptr;
             delete temp1;
         }
         else
@@ -107,8 +112,9 @@ template <typename T> class LinkedList
                 temp1 = temp1->next;
             }
 
-            Node<T>* temp2 = temp1->next;
-            temp1->next    = temp2->next;
+            dNode<T>* temp2 = temp1->next;
+            temp1->next     = temp2->next;
+            temp2->prev     = temp1->prev;
             delete temp2;
         }
 
@@ -127,7 +133,7 @@ template <typename T> class LinkedList
             throw std::out_of_range("Index out of bounds");
         }
 
-        Node<T>* temp = head;
+        dNode<T>* temp = head;
         for (int i = 0; i < index; i++)
         {
             temp = temp->next;
@@ -135,7 +141,7 @@ template <typename T> class LinkedList
         return temp->data;
     }
 
-    friend std::ostream& operator<<(std::ostream& os, const LinkedList& list)
+    friend std::ostream& operator<<(std::ostream& os, const DoublyLinkedList& list)
     {
         os << list.getString();
 
@@ -143,14 +149,14 @@ template <typename T> class LinkedList
     }
 
   private:
-    Node<T>* head;
-    int      m_size;
+    dNode<T>* head;
+    int       m_size;
 
     std::string getString() const
     {
         std::stringstream ss;
         ss << "{";
-        Node<T>* temp = head;
+        dNode<T>* temp = head;
         for (int i = 0; i < m_size - 1; i++)
         {
             ss << temp->data << ", ";
@@ -163,4 +169,4 @@ template <typename T> class LinkedList
     }
 };
 
-#endif
+#endif 
