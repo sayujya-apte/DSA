@@ -46,7 +46,7 @@ template <typename T, size_t Size> class Array
         return Size;
     }
 
-    T& operator[](size_t index)
+    T& operator[](int index)
     {
         if (index > Size)
         {

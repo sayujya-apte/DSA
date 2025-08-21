@@ -90,7 +90,7 @@ template <typename T> class List
         return end + 1;
     }
 
-    T& operator[](size_t index)
+    T& operator[](index index)
     {
         if (index > end)
         {
