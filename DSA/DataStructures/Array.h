@@ -70,4 +70,4 @@ template <typename T, size_t Size> class Array
     T arr[Size];
 };
 
-#endif 
+#endif
