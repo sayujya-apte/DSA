@@ -42,6 +42,49 @@ template <typename T> class List
         }
     }
 
+    void Insert(T x, int index)
+    {
+        if (index > end + 1)
+        {
+            throw std::out_of_range("Index out of bounds");
+        }
+        else if (index == end + 1)
+        {
+            Append(x);
+            return;
+        }
+        else
+        {
+            T temp = arr[index];
+            end++;
+            for (int i = index; i < end; i++)
+            {
+                T temp2    = arr[i + 1];
+                arr[i + 1] = temp;
+                temp       = temp2;
+            }
+            arr[index] = x;
+        }
+    }
+
+    void Delete(int index)
+    {
+        if (index > end)
+        {
+            throw std::out_of_range("Index out of bounds");
+        }
+
+        T temp = arr[index + 1];
+        for (int i = index; i < end; i++)
+        {
+            T temp2 = arr[i + 2];
+            arr[i]  = temp;
+            temp    = temp2;
+        }
+
+        end--;
+    }
+
     size_t size() const
     {
         return end + 1;
