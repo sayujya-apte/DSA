@@ -169,4 +169,4 @@ template <typename T> class DoublyLinkedList
     }
 };
 
-#endif 
+#endif

@@ -66,7 +66,6 @@ template <typename T, size_t Size> class Array
         return os;
     }
 
-  private:
     T arr[Size];
 };
 
